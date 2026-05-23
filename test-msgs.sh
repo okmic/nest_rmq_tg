@@ -3,7 +3,7 @@ curl -X POST http://localhost:3000/api/producer/send \
   -d '{
     "pattern": "telegram.notification",
     "data": {
-      "chatId": "5629581234",
+      "chatId": "123456789",
       "text": "System update",
       "parseMode": "HTML"
     }

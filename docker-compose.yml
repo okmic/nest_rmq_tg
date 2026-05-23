@@ -5,8 +5,8 @@ services:
     image: rabbitmq:3.12-management-alpine
     container_name: tg_rmq_rabbitmq
     ports:
-      - "5672:5672"   
-      - "15672:15672" 
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
@@ -14,6 +14,11 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - tg_rmq_network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   producer:
@@ -22,11 +27,11 @@ services:
       dockerfile: Dockerfile.producer
     container_name: tg_rmq_producer
     ports:
-      - "${PRODUCER_PORT:-3000}:3000"
+      - "3000:3000"
       - "9229:9229"
     environment:
       - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
-      - RABBITMQ_QUEUE=${RABBITMQ_QUEUE:-telegram_queue}
+      - RABBITMQ_QUEUE=${RABBITMQ_QUEUE:-tg_messages}
       - PORT=3000
     env_file:
       - .env
@@ -34,10 +39,12 @@ services:
       - ./:/app
       - /app/node_modules
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy 
     networks:
       - tg_rmq_network
     restart: unless-stopped
+    command: sh -c "sleep 5 && npm run start:dev:producer"
 
   consumer:
     build:
@@ -46,7 +53,7 @@ services:
     container_name: tg_rmq_consumer
     environment:
       - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
-      - RABBITMQ_QUEUE=${RABBITMQ_QUEUE:-telegram_queue}
+      - RABBITMQ_QUEUE=${RABBITMQ_QUEUE:-tg_messages}
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
     env_file:
@@ -55,10 +62,12 @@ services:
       - ./:/app
       - /app/node_modules
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     networks:
       - tg_rmq_network
     restart: unless-stopped
+    command: sh -c "sleep 10 && npm run start:dev:consumer"
 
 networks:
   tg_rmq_network:
