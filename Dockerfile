@@ -1,16 +1,14 @@
 FROM node:20-alpine
 
+
 WORKDIR /app
 
-RUN corepack enable && \
-    yarn global add nodemon
+COPY package.json ./
 
-COPY package.json yarn.lock ./
-
-RUN yarn install --frozen-lockfile
+RUN npm i
 
 COPY . .
 
 EXPOSE 3000 9229
 
-CMD ["yarn", "start:dev"]
+CMD ["npm", "run", "start:dev"]
