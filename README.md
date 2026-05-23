@@ -15,12 +15,12 @@ Simple APP на Nest.js, который:
 - Jest
 
 ## 📦 Как запустить?
-
+### Необходимо добавить токен вашего TG Bot в свойство .env -> TELEGRAM_BOT_TOKEN=твой_токен
 ### Через Docker (проще всего)
 
 ```bash
 git clone https://github.com/okmic/nest_rmq_tg.git
-cd tg_rmq_nest
+cd nest_rmq_tg
 
 cat > .env << EOF
 TELEGRAM_BOT_TOKEN=ваш_токен_от_botfather
