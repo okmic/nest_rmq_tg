@@ -19,7 +19,7 @@ Simple APP на Nest.js, который:
 ### Через Docker (проще всего)
 
 ```bash
-git clone <your-repo>
+git clone https://github.com/okmic/nest_rmq_tg.git
 cd tg_rmq_nest
 
 cat > .env << EOF
@@ -28,5 +28,4 @@ RABBITMQ_USER=guest
 RABBITMQ_PASSWORD=guest
 EOF
 
-# Запустить
 docker-compose up -d
