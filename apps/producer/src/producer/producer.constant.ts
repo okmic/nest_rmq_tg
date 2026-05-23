@@ -1,9 +1,4 @@
-export interface RetryConfig {
-  maxRetries: number;
-  retryDelay: number;
-  backoffMultiplier: number;
-  retryableErrors: string[];
-}
+import { RetryConfig } from "./producer.types";
 
 export const DEFAULT_RETRY_CONFIG: RetryConfig = {
   maxRetries: 3,

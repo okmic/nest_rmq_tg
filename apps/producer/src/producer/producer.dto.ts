@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-// DTO для data объекта
 export class TelegramNotificationDataDto {
   @ApiProperty({ 
     example: '12345678', 
@@ -31,7 +30,6 @@ export class TelegramNotificationDataDto {
   disableNotification?: boolean;
 }
 
-// DTO для тела запроса
 export class SendMessageRequestDto {
   @ApiProperty({ 
     example: 'telegram.notification', 
@@ -46,7 +44,6 @@ export class SendMessageRequestDto {
   data!: TelegramNotificationDataDto;
 }
 
-// DTO для ответа (соответствует интерфейсу Message)
 export class MessageResponseDto {
   @ApiProperty({ example: 'a3f4e5d6-1234-5678-9abc-def012345678' })
   id!: string;

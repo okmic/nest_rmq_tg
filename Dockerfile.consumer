@@ -1,14 +1,12 @@
 FROM node:20-alpine
 
-
 WORKDIR /app
 
 COPY package.json ./
-
 RUN npm i
 
 COPY . .
 
-EXPOSE 3000 9229
+EXPOSE 9229
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:dev:consumer"]

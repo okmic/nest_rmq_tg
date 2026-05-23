@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { TelegramService } from '../../telegram/telegram.service';
+import { TelegramService } from '../telegram/telegram.service';
 
 @Injectable()
 export class ConsumerService {

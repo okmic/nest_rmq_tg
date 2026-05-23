@@ -14,40 +14,50 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - tg_rmq_network
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     restart: unless-stopped
 
-  app-dev:
+  producer:
     build:
       context: .
-      dockerfile: Dockerfile
-      args:
-        - NODE_ENV=development
-    container_name: tg_rmq_app_dev
+      dockerfile: Dockerfile.producer
+    container_name: tg_rmq_producer
     ports:
-      - "${PORT:-3000}:3000" 
+      - "${PRODUCER_PORT:-3000}:3000"
       - "9229:9229"
     environment:
-      NODE_ENV: development
-      PORT: ${PORT:-3000}
-      RABBITMQ_URL: amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
-      RABBITMQ_QUEUE: ${RABBITMQ_QUEUE:-telegram_queue}
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
+      - RABBITMQ_QUEUE=${RABBITMQ_QUEUE:-telegram_queue}
+      - PORT=3000
     env_file:
       - .env
     volumes:
       - ./:/app
       - /app/node_modules
     depends_on:
-      rabbitmq:
-        condition: service_healthy
+      - rabbitmq
     networks:
       - tg_rmq_network
-    command: yarn start:dev
+    restart: unless-stopped
+
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile.consumer
+    container_name: tg_rmq_consumer
+    environment:
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-guest}:${RABBITMQ_PASSWORD:-guest}@rabbitmq:5672
+      - RABBITMQ_QUEUE=${RABBITMQ_QUEUE:-telegram_queue}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    depends_on:
+      - rabbitmq
+    networks:
+      - tg_rmq_network
     restart: unless-stopped
 
 networks:

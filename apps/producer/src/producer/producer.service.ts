@@ -1,16 +1,16 @@
 import { Injectable, Inject, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom, timeout, retry, catchError, throwError, timer } from 'rxjs';
-import { Message } from '../interfaces/message.interface';
-import { IdempotencyUtil } from '../utils/idempotency.util';
-import { DEFAULT_RETRY_CONFIG } from '../interfaces/retry.config.interface';
+import { Message } from './producer.types';
+import { IdempotencyUtil } from './producer.util';
+import { DEFAULT_RETRY_CONFIG } from './producer.constant';
 
 @Injectable()
 export class ProducerService implements OnModuleInit {
   private readonly logger = new Logger(ProducerService.name);
   
   constructor(
-    @Inject('RABBITMQ_PRODUCER') private readonly client: ClientProxy,
+    @Inject('PRODUCER') private readonly client: ClientProxy,
   ) {}
 
   async onModuleInit() {

@@ -18,3 +18,10 @@ export interface MessageAck {
   error?: string;
   processedAt: string;
 }
+
+export interface RetryConfig {
+  maxRetries: number;
+  retryDelay: number;
+  backoffMultiplier: number;
+  retryableErrors: string[];
+}

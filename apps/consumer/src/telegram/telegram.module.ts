@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TelegramService } from './telegram.service';
-import { RabbitMQModule } from '../rabbitmq/rabbitmq.module';
 
 @Module({
-  imports: [RabbitMQModule],
+  imports: [],
   providers: [TelegramService],
   exports: [TelegramService],
 })
-export class TelegramModule {
-}
+export class TelegramModule {}
