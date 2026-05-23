@@ -27,13 +27,15 @@
     "@nestjs/core": "^11.0.1",
     "@nestjs/microservices": "^11.1.19",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.4.4",
     "amqp-connection-manager": "^5.0.0",
     "amqplib": "^1.0.6",
     "axios": "^1.16.0",
     "dotenv": "^17.4.2",
     "grammy": "^1.42.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
